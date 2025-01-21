@@ -10,6 +10,9 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000; //If undefined gives 5000 by default
 
+app.use(express.json()); // to parse req.body
+app.use(express.urlencoded({ extended: true })); // to parse form data (urlencoded) - as seen in Postman
+
 app.use("/api/auth", authRoutes);
 
 app.listen(PORT, () => {

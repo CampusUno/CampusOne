@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import UserRoleEnum from "./user.role.enum.js";
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -38,7 +39,7 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ['student', 'professor', 'club', 'admin'],
+        enum: UserRoleEnum,
         required: true
     },
     isVerified: {
