@@ -2,7 +2,7 @@ import { strict } from 'assert';
 import jwt from 'jsonwebtoken';
 
 export const generateTokenAndSetCookie = (userId, res) => {
-    const token = jwt.sign({userId}, process.env.JWT_SECRET, {
+    const token = jwt.sign({userId}, process.env.JWT_SECRET, { // userId acts as the payload
         expiresIn: '15d'
     });
     res.cookie("jwt", token, {
