@@ -30,7 +30,7 @@ export const createPost = async (req, res) => {
         res.status(201).json(newPost);
 
     } catch (error) {
-        res.status(500).json({error:error.message});
+        res.status(500).json({ error: "Internal server error "});
         console.log("Error in create post: ", error.message);  
     }
 }
@@ -52,10 +52,34 @@ export const deletePost = async (req, res) => {
         }
 
         await Post.findByIdAndDelete(req.params.id);
-        res.status(200).json({message: "Post delete successfully"});
+        res.status(200).json({message: "Post deleted successfully"});
 
     } catch (error) {
-        res.status(500).json({error:error.message});
+        res.status(500).json({ error: "Internal server error "});
         console.log("Error in delete post: ", error.message);  
+    }
+}
+
+export const commentOnPost = async (req, res) => {
+    try {
+        const { text } = req.body;
+        const postId = req.params.id;
+        const userId = req.user._id;
+
+        if(!text) return res.status(400).json({message: "Text field is required"});
+        
+        const post = await Post.findById(postId);
+        if (!post) return res.status(400).json({message: "Post not found"});
+
+        const comment = {user: userId, text};
+
+        post.comments.push(comment);
+        await post.save();
+
+        res.status(200).json(post);
+
+    } catch (error) {
+        res.status(500).json({ error: "Internal server error "});
+        console.log("Error in commentOnPost: ", error.message);  
     }
 }
