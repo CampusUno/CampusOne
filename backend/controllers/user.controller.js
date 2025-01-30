@@ -58,3 +58,44 @@ export const followUnfollowUser = async (req, res) => {
         console.log("Error in followUnfollowUser: ", error.message);   
     }
 }
+
+export const getSuggestedUsers = async (req, res) => {
+    try {
+        // Remove CurrentUser and users we already follow from SuggestedUsers array
+
+        const myUserId = req.user._id;
+
+        // Get the myUser object with myid and following array
+        // Returns an array of user objects
+        const usersFollowedByMe = await User.findById(myUserId).select("following");
+
+        // Get 10 sample users that are not me duh
+        const users = await User.aggregate([
+            {
+                $match: {
+                    _id: {$ne: myUserId} // Match ids that are $ne (not equalto) myUserId
+                }
+            },
+            {
+                $sample: {
+                    size:10
+                }
+            } // Return a sample of 10 users
+        ])
+        // console.log(usersFollowedByMe);
+        // console.log(users);
+
+        // From usersFollowedByMe object select following that includes user._id (me) | Make sure it doesn't match with the aggregate 10 users
+        // Meaning, from 10 users remove all those users that already have me in their following (I don't follow them)
+        const filteredUsers = users.filter(user => !usersFollowedByMe.following.includes(user._id)); 
+        const suggestedUsers = filteredUsers.slice(0,4);
+
+        // Remove password users
+        suggestedUsers.forEach(user => user.password=null);
+
+        res.status(200).json(suggestedUsers);
+    } catch (error) {
+        res.status(500).json({error:error.message});
+        console.log("Error in getSuggestedUsers: ", error.message);   
+    }
+};
