@@ -42,6 +42,20 @@ const userSchema = new mongoose.Schema({
         enum: UserRoleEnum,
         required: true
     },
+    followers: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            default: []
+        }
+    ],
+    following: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            default: []
+        }
+    ],
     isVerified: {
         type: Boolean,
         default: false
