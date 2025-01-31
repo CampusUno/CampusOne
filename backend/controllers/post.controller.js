@@ -2,6 +2,7 @@ import { v2 as cloudinary } from 'cloudinary';
 
 import Post from "../models/post.model.js";
 import User from "../models/user.model.js";
+import Notification from '../models/notification.model.js';
 
 export const createPost = async (req, res) => {
     try {
@@ -81,5 +82,50 @@ export const commentOnPost = async (req, res) => {
     } catch (error) {
         res.status(500).json({ error: "Internal server error "});
         console.log("Error in commentOnPost: ", error.message);  
+    }
+}
+
+export const likeUnlikePost = async (req, res) => {
+    try {
+        const postId = req.params.id;
+        const userId = req.user._id;
+
+        const post = await Post.findById(postId);
+        if (!post) return res.status(400).json({message: "Post not found"});
+
+        const userLikedPost = post.likes.includes(userId);
+
+        if(userLikedPost) {
+            // Unlike post
+            await Post.updateOne({_id:postId}, { $pull: { likes: userId }}); // In updateOne the filter needs to be an object with _id:
+            res.status(200).json({message: "Post unliked successfully"});
+        } else {
+            // Like post
+            // await Post.findByIdAndUpdate(postId, { $push: { likes: userId }});  // In findByAndUpdate the filter can be of type any
+            post.likes.push(userId);
+            await post.save();
+            // I'm guessing we are using this push method for like and $pull metgod for unlike because there is no good mechanism to directly pop a particular element in JS
+            const notification = new Notification({
+                from: userId,
+                to: post.user,
+                type: "like"
+            });
+            await notification.save();
+            res.status(200).json({message: "Post liked successfully"});
+        }
+
+        /*
+        Alternative approach
+        if (post.likes.includes(userId)) {
+            post.likes.pull(userId);
+        } else {
+            post.likes.push(userId);
+        }
+        await post.save();
+        */
+
+    } catch (error) {
+        res.status(500).json({ error: "Internal server error "});
+        console.log("Error in LikeUnlike Post: ", error.message); 
     }
 }
