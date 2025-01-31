@@ -129,3 +129,28 @@ export const likeUnlikePost = async (req, res) => {
         console.log("Error in LikeUnlike Post: ", error.message); 
     }
 }
+
+export const getAllPosts = async (req, res) => {
+    try {
+        // -1 gives latest at the top
+        // This method returns post with a user field but the user is just that a userid, from here we cannot directly get fullname, img, etc so we add in populate to get details of the user field
+        // Can't use .select("-password") with populate, need a different approach
+        const posts = await Post.find().sort({ createdAt: -1 }).populate({
+            path: "user",
+            select: "-password"
+        })
+        .populate({
+            path: "comments.user",
+            select: "-password"
+        })
+
+        if (posts.length === 0) {
+            return res.status(200).json([]);
+        }
+
+        res.status(200).json(posts);
+    } catch (error) {
+        res.status(500).json({ error: "Internal server error "});
+        console.log("Error in getAllPosts: ", error.message); 
+    }
+}
