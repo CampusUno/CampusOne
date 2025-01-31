@@ -6,6 +6,7 @@ import { createPost, deletePost, commentOnPost, likeUnlikePost, getAllPosts } fr
 const router = express.Router();
 
 router.get("/all", protectRoute, getAllPosts);
+// router.get("/likes/:id", protectRoute, getLikedPosts);
 router.post("/create", protectRoute, createPost);
 router.delete("/:id", protectRoute, deletePost);
 router.post("/like/:id", protectRoute, likeUnlikePost);

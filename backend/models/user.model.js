@@ -56,6 +56,13 @@ const userSchema = new mongoose.Schema({
             default: []
         }
     ],
+    likedPosts: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Post',
+            default: []
+        }
+    ],
     isVerified: {
         type: Boolean,
         default: false

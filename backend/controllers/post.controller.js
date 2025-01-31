@@ -98,12 +98,14 @@ export const likeUnlikePost = async (req, res) => {
         if(userLikedPost) {
             // Unlike post
             await Post.updateOne({_id:postId}, { $pull: { likes: userId }}); // In updateOne the filter needs to be an object with _id:
+            await User.updateOne({_id:userId}, { $pull: { likedPosts: postId }});
             res.status(200).json({message: "Post unliked successfully"});
         } else {
             // Like post
             // await Post.findByIdAndUpdate(postId, { $push: { likes: userId }});  // In findByAndUpdate the filter can be of type any
             post.likes.push(userId);
             await post.save();
+            await User.updateOne({_id:userId}, { $push: { likedPosts: postId }});
             // I'm guessing we are using this push method for like and $pull metgod for unlike because there is no good mechanism to directly pop a particular element in JS
             const notification = new Notification({
                 from: userId,
