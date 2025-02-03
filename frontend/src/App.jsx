@@ -11,6 +11,7 @@ function App() {
       <p className="text-3xl">
         Click on the Vite and React logos to learn more
       </p>
+      <button className="btn btn-neutral">Neutral</button>
     </>
   )
 }
