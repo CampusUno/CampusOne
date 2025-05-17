@@ -1,26 +1,18 @@
-import Navbar from "./components/common/navbar.jsx";
+import { Route, Routes } from "react-router-dom";
+
+import HomePage from "./pages/Home/HomePage.jsx";
+import LoginPage from "./pages/auth/LoginPage.jsx";
+import SignUpPage from "./pages/auth/SignUpPage.jsx";
 
 function App() {
   return (
-    <>
-      <Navbar />
-      {/* Open the modal using document.getElementById('ID').showModal() method */}
-      <button
-        className="btn btn-primary"
-        onClick={() => document.getElementById("my_modal_2").showModal()}
-      >
-        open modal
-      </button>
-      <dialog id="my_modal_2" className="modal">
-        <div className="modal-box">
-          <h3 className="font-bold text-lg">Hello!</h3>
-          <p className="py-4">Press ESC key or click outside to close</p>
-        </div>
-        <form method="dialog" className="modal-backdrop">
-          <button>close</button>
-        </form>
-      </dialog>
-    </>
+    <div className="max-w-7xl mx-auto">
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
+      </Routes>
+    </div>
   );
 }
 
