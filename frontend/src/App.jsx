@@ -1,19 +1,27 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Navbar from "./components/common/navbar.jsx";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-      <p className="text-3xl">
-        Click on the Vite and React logos to learn more
-      </p>
-      <button className="btn btn-neutral">Neutral</button>
+      <Navbar />
+      {/* Open the modal using document.getElementById('ID').showModal() method */}
+      <button
+        className="btn btn-primary"
+        onClick={() => document.getElementById("my_modal_2").showModal()}
+      >
+        open modal
+      </button>
+      <dialog id="my_modal_2" className="modal">
+        <div className="modal-box">
+          <h3 className="font-bold text-lg">Hello!</h3>
+          <p className="py-4">Press ESC key or click outside to close</p>
+        </div>
+        <form method="dialog" className="modal-backdrop">
+          <button>close</button>
+        </form>
+      </dialog>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
