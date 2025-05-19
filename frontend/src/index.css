@@ -1,4 +1,5 @@
 @import "tailwindcss";
+/* @config "../tailwind.config.js"; */
 
 :root {
   --color-base-100: oklch(100% 0 0);
@@ -45,6 +46,12 @@
   --color-warning-content: var(--color-warning-content);
   --color-error: var(--color-error);
   --color-error-content: var(--color-error-content);
+
+  /* --breakpoint-xs: 400px;
+  --breakpoint-sm: 639px;
+  --breakpoint-md: 767px;
+  --breakpoint-lg: 1023px;
+  --breakpoint-xl: 1279px; */
 }
 
 @plugin "daisyui" {
@@ -95,4 +102,8 @@
 #root {
   padding: 0 !important;
   max-width: 100% !important;
+}
+
+* {
+  box-sizing: border-box;
 }
